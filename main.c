@@ -14,7 +14,7 @@ static void removerQuebraLinha(char *s) {
     if (len > 0 && s[len - 1] == '\n') s[len - 1] = '\0';
 }
 
-static void lerCampoTexto(const char *rotulo, char *destino, size_t tamanho) {
+static void lerCampoTexto(char *rotulo, char *destino, size_t tamanho) {
     char buffer[tamanho + 1];
     int valido = 0;
 
@@ -30,9 +30,8 @@ static void lerCampoTexto(const char *rotulo, char *destino, size_t tamanho) {
 
         removerQuebraLinha(buffer);
 
-        if (strlen(buffer) == 0) {
-            printf("Campo nao pode ficar vazio. Tente novamente.\n");
-        } else {
+        if (strlen(buffer) == 0) printf("Campo nao pode ficar vazio. Tente novamente.\n");
+        else {
             strcpy(destino, buffer);
             valido = 1;
         }
@@ -83,11 +82,8 @@ int main(void) {
             case 2:
                 lerCampoTexto("Matricula a buscar", matrBusca, sizeof(matrBusca));
                 encontrado = avl_buscar(arvore, matrBusca);
-                if (encontrado != NULL) {
-                    aluno_exibir(*encontrado);
-                } else {
-                    printf("Aluno nao encontrado!\n");
-                }
+                if (encontrado != NULL) aluno_exibir(*encontrado);
+                else printf("Aluno nao encontrado!\n");
                 break;
 
             case 3:

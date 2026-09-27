@@ -196,9 +196,11 @@ int avl_cadastrar(AVLTree *arvore, Aluno elem) {
     return inserirNo(&(arvore->raiz), elem, &cresceu);
 }
 
-Aluno* avl_buscar(AVLTree *arvore, const char *matr) {
+Aluno* avl_buscar(AVLTree *arvore, char *matr) {
     AVLNode *no = buscarNo(arvore->raiz, matr);
-    return no != NULL ? no->info : NULL;
+    if (no != NULL) return no->info;
+    else return NULL;
+
 }
 
 void avl_percorrerPorNivel(AVLTree *arvore) {
@@ -220,9 +222,6 @@ void avl_percorrerPorNivel(AVLTree *arvore) {
 }
 
 void avl_percorrerEmOrdem(AVLTree *arvore) {
-    if (arvore->raiz == NULL) {
-        printf("Arvore vazia\n");
-    } else {
-        emOrdemNo(arvore->raiz);
-    }
+    if (arvore->raiz == NULL) printf("Arvore vazia\n"); 
+    else emOrdemNo(arvore->raiz);
 }

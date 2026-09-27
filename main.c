@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "aluno.h"
 #include "avl.h"
@@ -11,6 +12,31 @@ static void limparBufferEntrada(void) {
 static void removerQuebraLinha(char *s) {
     size_t len = strlen(s);
     if (len > 0 && s[len - 1] == '\n') s[len - 1] = '\0';
+}
+
+static void lerCampoTexto(const char *rotulo, char *destino, size_t tamanho) {
+    char buffer[tamanho + 1];
+    int valido = 0;
+
+    do {
+        printf("%s (max %zu caracteres): ", rotulo, tamanho - 1);
+        fgets(buffer, sizeof(buffer), stdin);
+
+        if (strchr(buffer, '\n') == NULL) {
+            limparBufferEntrada();
+            printf("Texto muito longo (max %zu caracteres). Tente novamente.\n", tamanho - 1);
+            continue;
+        }
+
+        removerQuebraLinha(buffer);
+
+        if (strlen(buffer) == 0) {
+            printf("Campo nao pode ficar vazio. Tente novamente.\n");
+        } else {
+            strcpy(destino, buffer);
+            valido = 1;
+        }
+    } while (!valido);
 }
 
 static void exibirMenu(void) {
@@ -38,13 +64,8 @@ int main(void) {
 
         switch (op) {
             case 1:
-                printf("Matricula: ");
-                fgets(matr, sizeof(matr), stdin);
-                removerQuebraLinha(matr);
-
-                printf("Nome: ");
-                fgets(nome, sizeof(nome), stdin);
-                removerQuebraLinha(nome);
+                lerCampoTexto("Matricula", matr, sizeof(matr));
+                lerCampoTexto("Nome", nome, sizeof(nome));
 
                 printf("Media: ");
                 scanf("%f", &media);
@@ -60,9 +81,7 @@ int main(void) {
                 break;
 
             case 2:
-                printf("Matricula a buscar: ");
-                fgets(matrBusca, sizeof(matrBusca), stdin);
-                removerQuebraLinha(matrBusca);
+                lerCampoTexto("Matricula a buscar", matrBusca, sizeof(matrBusca));
                 encontrado = avl_buscar(arvore, matrBusca);
                 if (encontrado != NULL) {
                     aluno_exibir(*encontrado);

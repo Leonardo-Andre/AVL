@@ -124,7 +124,7 @@ static int inserirNo(AVLNode **raiz, Aluno elem, int *cresceu) {
     int cmp = strcmp(elem.matr, (*raiz)->info->matr);
     if (cmp == 0) {
         *cresceu = 0;
-        return 0; // matricula duplicada
+        return 0;
     }
 
     int inserido;
@@ -150,7 +150,7 @@ static int inserirNo(AVLNode **raiz, Aluno elem, int *cresceu) {
     return inserido;
 }
 
-static AVLNode* buscarNo(AVLNode *raiz, const char *matr) {
+static AVLNode* buscarNo(AVLNode *raiz, char *matr) {
     if (raiz == NULL) return NULL;
     int cmp = strcmp(matr, raiz->info->matr);
     if (cmp == 0) return raiz;
@@ -171,14 +171,12 @@ static void destroyNo(AVLNode *raiz) {
     if (raiz != NULL) {
         destroyNo(raiz->esq);
         destroyNo(raiz->dir);
-        free(raiz->info); // libera o Aluno alocado à parte, senão vaza memória
+        free(raiz->info);
         free(raiz);
     }
 }
 
-/* ---------------------------------------------------------------
-   Interface pública — só isso está declarado em avl.h
-   --------------------------------------------------------------- */
+/*"Interface" avl*/
 
 AVLTree* avl_criar(void) {
     AVLTree *arvore = (AVLTree*) malloc(sizeof(AVLTree));
